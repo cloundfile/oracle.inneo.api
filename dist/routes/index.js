@@ -7,7 +7,7 @@ const Authentication_1 = require("../application/Authentication");
 const Server_1 = require("../application/Server");
 const authentication = new Authentication_1.Authentication();
 const server = new Server_1.Server();
-routes.get('/', server.create);
+routes.get('/', server.status);
 routes.post('/api/login', authentication.login);
 routes.post('/api/usuario', login_1.required, authentication.create);
 routes.put('/api/usuario', login_1.required, authentication.update);
