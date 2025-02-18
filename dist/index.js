@@ -7,8 +7,6 @@ const express_1 = __importDefault(require("express"));
 const data_source_1 = require("./data-source");
 const routes_1 = __importDefault(require("./routes"));
 var cors = require('cors');
-const swagger_1 = require("./utils/swagger");
-const swaggerUi = require('swagger-ui-express');
 data_source_1.AppDataSource.initialize().then(() => {
     const app = (0, express_1.default)();
     app.use(express_1.default.json());
@@ -23,6 +21,5 @@ data_source_1.AppDataSource.initialize().then(() => {
     });
     app.use(cors());
     app.use(routes_1.default);
-    app.use('/docs', swaggerUi.serve, swaggerUi.setup(swagger_1.swaggerOptions));
     return app.listen(process.env.PORT || 3000);
 });
