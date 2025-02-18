@@ -1,18 +1,15 @@
-import { required, optional } from '../middlewares/login';
+import { required } from '../middlewares/login';
 import { Router } from 'express';
 const routes = Router();
 
-
 import { Authentication } from '../application/Authentication';
-import { Server } from '../application/Server';
+import { Video  } from '../services/api-youtube';
 
 const authentication = new Authentication();
-const server = new Server();
+const youtube = new Video();
 
-
-routes.get('/', server.status);
-routes.post('/api/login', authentication.login);
-
+routes.get('/api/videos',      youtube.search)
+routes.post('/api/login',     authentication.login);
 routes.post('/api/usuario',   required, authentication.create);
 routes.put('/api/usuario',    required, authentication.update);
 routes.delete('/api/usuario', required, authentication.delete);

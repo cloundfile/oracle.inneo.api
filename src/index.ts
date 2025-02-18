@@ -1,8 +1,6 @@
 import express, { Application } from 'express';
 import { AppDataSource } from './data-source';
 import routes from './routes';
-
-
 var cors = require('cors');
 
 AppDataSource.initialize().then(() => {
@@ -23,7 +21,7 @@ AppDataSource.initialize().then(() => {
     next();
   });
   app.use(cors())  
-  app.use(routes);
-
+  app.use(routes); 
+  
   return app.listen(process.env.PORT || 3000);
 });
