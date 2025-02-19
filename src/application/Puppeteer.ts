@@ -19,7 +19,12 @@ export class Youtube {
             const page = await browser.newPage();
             await page.goto(youtube);
 
+            const TIMEOUT = 30000; // Timeout in milliseconds (30 seconds)
 
+            const timeoutPromise = new Promise<never>((_, reject) =>
+                setTimeout(() => reject(new Error('Request timed out')), TIMEOUT)
+            );
+            
             await page.evaluate(() => {
                 return new Promise<void>((resolve) => {
                     const distance = 200;
@@ -44,7 +49,6 @@ export class Youtube {
                     return {
                         title: (item as HTMLElement).innerText ||  "Novo",
                         watch: "https://www.youtube.com" + item.getAttribute('href') || 'NULL',
-                        tumbnail: item.querySelector('.shortsLockupViewModelHostThumbnailContainer.shortsLockupViewModelHostThumbnailContainerAspectRatioTwoByThree.shortsLockupViewModelHostThumbnailContainerRounded img')?.getAttribute("src") || 'null',
                     };
                 });
             });
