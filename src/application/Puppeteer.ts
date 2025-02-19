@@ -31,7 +31,7 @@ export class Youtube {
                             clearInterval(timer);
                             resolve();
                         }
-                    }, 5000);
+                    }, 100);
                 });
             });
 

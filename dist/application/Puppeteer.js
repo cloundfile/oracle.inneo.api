@@ -31,7 +31,7 @@ class Youtube {
                             clearInterval(timer);
                             resolve();
                         }
-                    }, 5000);
+                    }, 100);
                 });
             });
             const data = await page.evaluate(() => {
