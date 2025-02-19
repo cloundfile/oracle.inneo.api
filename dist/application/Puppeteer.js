@@ -3,10 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Video = void 0;
-const puppeteer_core_1 = __importDefault(require("puppeteer-core"));
+exports.Youtube = void 0;
 const chromium_1 = __importDefault(require("@sparticuz/chromium"));
-class Video {
+const puppeteer_core_1 = __importDefault(require("puppeteer-core"));
+class Youtube {
     async search(req, res) {
         const query = req.query.search_query;
         const youtube = `https://www.youtube.com/results?search_query=${query}`;
@@ -20,34 +20,33 @@ class Video {
             });
             const page = await browser.newPage();
             await page.goto(youtube);
-            const autoScroll = async () => {
-                await page.evaluate(() => {
-                    return new Promise((resolve) => {
-                        const distance = 200;
-                        let scrolledAmount = 0;
-                        const timer = setInterval(() => {
-                            window.scrollBy(0, distance);
-                            scrolledAmount += distance;
-                            if (scrolledAmount >= document.body.scrollHeight) {
-                                clearInterval(timer);
-                                resolve();
-                            }
-                        }, 5000);
-                    });
+            await page.evaluate(() => {
+                return new Promise((resolve) => {
+                    const distance = 200;
+                    let scrolledAmount = 0;
+                    const timer = setInterval(() => {
+                        window.scrollBy(0, distance);
+                        scrolledAmount += distance;
+                        if (scrolledAmount >= document.body.scrollHeight) {
+                            clearInterval(timer);
+                            resolve();
+                        }
+                    }, 5000);
                 });
-            };
+            });
             const data = await page.evaluate(() => {
                 const elements = document.querySelectorAll('.style-scope.ytd-item-section-renderer.style-scope.ytd-item-section-renderer a');
                 const posts = Array.from(elements);
                 return posts.map(item => {
                     return {
-                        title: item.querySelector("#title-wrapper h3 a yt-formatted-string")?.textContent || 'NULL',
+                        title: item.innerText || "Novo",
                         watch: "https://www.youtube.com" + item.getAttribute('href') || 'NULL',
-                        tumbnail: item.querySelector('ytd-thumbnail img')?.getAttribute("src") || 'NULL',
+                        tumbnail: item.querySelector('.shortsLockupViewModelHostThumbnailContainer.shortsLockupViewModelHostThumbnailContainerAspectRatioTwoByThree.shortsLockupViewModelHostThumbnailContainerRounded img')?.getAttribute("src") || 'null',
                     };
                 });
             });
-            return res.json(data);
+            const response = data.filter((item, index) => item.watch && item.watch.indexOf('https://www.youtube.com/shorts/') > -1);
+            return res.json(response);
         }
         catch (error) {
             console.error('Error fetching YouTube data:', error);
@@ -60,4 +59,4 @@ class Video {
         }
     }
 }
-exports.Video = Video;
+exports.Youtube = Youtube;
