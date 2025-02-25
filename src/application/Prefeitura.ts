@@ -2,10 +2,9 @@ import { Request, Response } from 'express';
 import chromium from '@sparticuz/chromium';
 import puppeteer from 'puppeteer-core';
 
-export class Youtube {
-    async search(req: Request, res: Response): Promise<Response> {
-        const query = req.query.search_query;
-        const youtube = `https://www.youtube.com/results?search_query=${query}`;
+export class Prefeitura {
+    async castramovel(req: Request, res: Response): Promise<Response> {
+        const url = `https://pmp.pr.gov.br/website/views/castrometro.php`;
         let browser;
 
         try {
@@ -17,9 +16,9 @@ export class Youtube {
             });
 
             const page = await browser.newPage();
-            await page.goto(youtube);
+            await page.goto(url);
 
-            const TIMEOUT = 30000; // Timeout in milliseconds (30 seconds)
+            const TIMEOUT = 30000;
 
             const timeoutPromise = new Promise<never>((_, reject) =>
                 setTimeout(() => reject(new Error('Request timed out')), TIMEOUT)
@@ -42,21 +41,22 @@ export class Youtube {
 
 
             const data = await page.evaluate(() => {
-                const elements = document.querySelectorAll('.style-scope.ytd-item-section-renderer.style-scope.ytd-item-section-renderer a');
+                const elements = document.querySelectorAll('.card-body.center-covid-mobile');
                 const posts = Array.from(elements);
 
                 return posts.map(item => {
                     return {
-                        title: (item as HTMLElement).innerText ||  "Novo",
-                        watch: "https://www.youtube.com" + item.getAttribute('href') || 'NULL',
+                        dados: item.querySelector('a')?.innerText,
                     };
                 });
             });
 
-            const response = data.filter((item, index) => item.watch  && item.watch.indexOf('https://www.youtube.com/shorts/') > -1);
-            return res.json(response);
+            const normalizado = normalizacao(data);
+            return res.json(normalizado);
+         
+         
         } catch (error) {
-            console.error('Error fetching YouTube data:', error);
+            console.error('Internal Server Error:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
         } finally {
             if (browser) {
@@ -65,3 +65,40 @@ export class Youtube {
         }
     }
 }
+
+interface ResponseItem {
+    atentimento: string;
+    total: number;
+    date:  string;
+    time:  string;
+}
+
+interface Item {
+    dados: string | any;
+}
+
+
+function normalizacao(data: Item[]): ResponseItem[] {
+    const response: ResponseItem[] = [];
+
+    data.forEach(item => {
+        try {
+            if (!item.dados) return;
+            
+            const [total] = item.dados.split(' ');
+            const [atentimento, outros] = item.dados.split("\nATUALIZADO EM: ");
+            const [data, hora] = outros.split(' ');
+            response.push({ atentimento: atentimento, date: data, time: hora, total: total });
+        } catch (error) {
+            console.error('Error during normalization:', error);
+        }
+    });
+
+    return response;
+}
+  
+  
+
+/*
+item.watch.indexOf('https://www.youtube.com/shorts/') > -1
+*/

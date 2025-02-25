@@ -24,4 +24,6 @@ AppDataSource.initialize().then(() => {
   app.use(routes); 
   
   return app.listen(process.env.PORT || 3000);
+}).catch(() => {
+  console.log("Could not connect to the database");
 });
