@@ -67,8 +67,8 @@ export class Prefeitura {
 }
 
 interface ResponseItem {
-    atentimento: string;
-    total: number;
+    description: string;
+    procedures: number;
     date:  string;
     time:  string;
 }
@@ -85,10 +85,10 @@ function normalizacao(data: Item[]): ResponseItem[] {
         try {
             if (!item.dados) return;
             
-            const [total] = item.dados.split(' ');
-            const [atentimento, outros] = item.dados.split("\nATUALIZADO EM: ");
-            const [data, hora] = outros.split(' ');
-            response.push({ atentimento: atentimento, date: data, time: hora, total: total });
+            const [dados, timestamp] = item.dados.split("\nATUALIZADO EM: ");
+            const [date, time] = timestamp.split(' ');
+            const [procedures, description] = dados.match(/\D+|\d+/g);
+            response.push({ description: description.trim(), procedures: procedures, date: date, time: time });
         } catch (error) {
             console.error('Error during normalization:', error);
         }
