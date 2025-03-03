@@ -25,6 +25,10 @@ AppDataSource.initialize().then(() => {
     next();
   });
   app.use(cors())  
+  app.use(cors({
+    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization']
+  }));
+  
   app.use(routes); 
   
   return app.listen(process.env.PORT || 3000);
