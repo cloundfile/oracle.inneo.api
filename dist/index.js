@@ -12,6 +12,7 @@ data_source_1.AppDataSource.initialize().then(() => {
     app.use(express_1.default.json());
     app.use((req, res, next) => {
         res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
         res.header('Access-Control-Allow-Header', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
         if (req.method === 'OPTIONS') {
             res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
