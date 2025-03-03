@@ -1,8 +1,6 @@
 import { Request, Response } from 'express';
 import { videoRep } from '../repository/VideoRep';
 import { chunkRep } from '../repository/ChunkRep';
-import { timeStamp } from 'console';
-
 
 export class Video {
     async create(req: Request, res: Response) {

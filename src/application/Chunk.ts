@@ -31,7 +31,8 @@ export class Chunk {
 
         chunks.map(async item => {
             await chunkRep.delete(item.uuid);
-        });        
+        });   
+             
         return res.status(201).json({ message: videoId + " Deletado com sucesso."});
     }
 
