@@ -17,12 +17,12 @@ routes.delete('/api/usuario', required, authentication.delete);
 routes.get('/api/usuario',    required, authentication.findall);
 
 //Video api
-routes.get('/api/video',    video.findBy);
+routes.post('/api/video',   video.findBy);
 routes.get('/api/videos',   video.findall);
-routes.post('/api/video',   required, video.create);
+routes.post('/api/video/new',   required, video.create);
 
-routes.get('/api/transcription/',   chunk.findall);
-routes.post('/api/transcription',   required, chunk.create);
+routes.post('/api/transcription/',   chunk.findall);
+routes.post('/api/transcription/new',   required, chunk.create);
 routes.delete('/api/transcription', required, chunk.delete);
 
 export default routes
