@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Chunk = void 0;
-const ChunkRep_1 = require("../repository//ChunkRep");
+const ChunkRep_1 = require("../repository/ChunkRep");
 class Chunk {
     async create(req, res) {
         const { videoId, language, chunks } = req.body;
