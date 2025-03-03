@@ -10,10 +10,6 @@ AppDataSource.initialize().then(() => {
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header(
-      'Access-Control-Allow-Methods',
-      'POST, GET, OPTIONS'
-    );
-    res.header(
       'Access-Control-Allow-Header',
       'Origin, X-Requested-With, Content-Type, Accept, Authorization'
     );
@@ -24,11 +20,10 @@ AppDataSource.initialize().then(() => {
     }
     next();
   });
-  app.use(cors())  
   app.use(cors({
     allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization']
   }));
-  
+
   app.use(routes); 
   
   return app.listen(process.env.PORT || 3000);
