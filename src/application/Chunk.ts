@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { chunkRep } from '../repository//ChunkRep';
+import { chunkRep } from '../repository/ChunkRep';
 
 export class Chunk {
     async create(req: Request, res: Response) {

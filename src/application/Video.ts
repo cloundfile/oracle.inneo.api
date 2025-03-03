@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { videoRep } from '../repository/VideoRep';
-import { youtubeID } from '../utils/youtube';
+import { chunkRep } from '../repository/ChunkRep';
+import { timeStamp } from 'console';
+
 
 export class Video {
     async create(req: Request, res: Response) {
@@ -15,6 +17,22 @@ export class Video {
         if(registered) return res.status(400).json({ message: "Vídeo already registered."});
         await videoRep.save(create);
         return res.status(201).json(create);
+    }
+
+    async findBy(req: Request, res: Response) {
+        const { videoId, language } = req.body; 
+        const video = await videoRep.findOneBy({videoId: String(videoId)});
+        if(!video) return res.status(200).json({ message: "Nenhum registro encontrado."});
+
+        const chunks = await chunkRep.findBy({videoId: video.videoId, language: String(language)});
+
+        const response = {
+            video,
+            chunks: chunks.map((item) => {
+                return { timestamp: item.timestamp, text: item.text }
+            })
+        }
+        return res.json(response);
     }
 
     async findall(req: Request, res: Response) {
