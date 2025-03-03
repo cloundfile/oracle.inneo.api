@@ -17,7 +17,7 @@ routes.delete('/api/usuario', required, authentication.delete);
 routes.get('/api/usuario',    required, authentication.findall);
 
 //Video api
-routes.get('/api/youtube',    required, video.findall);
+routes.get('/api/youtube',    video.findall);
 routes.post('/api/youtube',   required, video.create);
 
 routes.get('/api/transcription/',   chunk.findall);
