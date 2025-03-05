@@ -5,8 +5,10 @@ const login_1 = require("../middlewares/login");
 const Video_1 = require("../application/Video");
 const express_1 = require("express");
 const Chunk_1 = require("../application/Chunk");
+const Download_1 = require("../application/Download");
 const routes = (0, express_1.Router)();
 const authentication = new Authentication_1.Authentication();
+const download = new Download_1.Download();
 const video = new Video_1.Video();
 const chunk = new Chunk_1.Chunk();
 //Login api
@@ -22,4 +24,6 @@ routes.post('/api/video/new', login_1.required, video.create);
 routes.post('/api/transcription/', chunk.findall);
 routes.post('/api/transcription/new', login_1.required, chunk.create);
 routes.delete('/api/transcription', login_1.required, chunk.delete);
+routes.get('/api/download/audio/:videoId', download.audio);
+routes.get('/api/download/video/:videoId', download.video);
 exports.default = routes;
