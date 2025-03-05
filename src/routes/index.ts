@@ -3,9 +3,11 @@ import { required } from '../middlewares/login';
 import { Video } from '../application/Video';
 import { Router } from 'express';
 import { Chunk } from '../application/Chunk';
+import { Download } from '../application/Download';
 const routes = Router();
 
 const authentication = new Authentication();
+const download = new Download();
 const video = new Video();
 const chunk = new Chunk();
 
@@ -24,5 +26,8 @@ routes.post('/api/video/new',   required, video.create);
 routes.post('/api/transcription/',   chunk.findall);
 routes.post('/api/transcription/new',   required, chunk.create);
 routes.delete('/api/transcription', required, chunk.delete);
+
+routes.get('/api/download/audio/:videoId', download.audio);
+routes.get('/api/download/video/:videoId', download.video);
 
 export default routes

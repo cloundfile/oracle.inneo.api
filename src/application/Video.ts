@@ -11,6 +11,7 @@ export class Video {
             videoId,
             uri: `https://www.youtube.com/watch?v=${videoId}`
         })
+
         const registered = await videoRep.findOneBy({videoId: String(create.videoId)});
         if(registered) return res.status(400).json({ message: "Vídeo already registered."});
         await videoRep.save(create);
@@ -21,9 +22,8 @@ export class Video {
         const { videoId, language } = req.body; 
         const video = await videoRep.findOneBy({videoId: String(videoId)});
         if(!video) return res.status(200).json({ message: "Nenhum registro encontrado."});
-
         const chunks = await chunkRep.findBy({videoId: video.videoId, language: String(language)});
-
+        
         const response = {
             video,
             chunks: chunks.map((item) => {
@@ -40,4 +40,3 @@ export class Video {
         return res.json(response);
     }
 }
-
