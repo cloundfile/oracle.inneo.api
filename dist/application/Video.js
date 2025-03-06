@@ -5,29 +5,34 @@ const VideoRep_1 = require("../repository/VideoRep");
 const ChunkRep_1 = require("../repository/ChunkRep");
 class Video {
     async create(req, res) {
-        const { videoId } = req.body;
-        if (!videoId)
-            return res.status(400).json({ message: "Campos com * obrigatório." });
+        const { uuid, title, description } = req.body;
+        if (!uuid || !title || !description)
+            return res.status(400).json({ message: "Fields ( uuid, title, description ) are required." });
         const create = VideoRep_1.videoRep.create({
-            videoId,
-            uri: `https://www.youtube.com/watch?v=${videoId}`
+            uuid,
+            title,
+            description
         });
-        const registered = await VideoRep_1.videoRep.findOneBy({ videoId: String(create.videoId) });
+        const registered = await VideoRep_1.videoRep.findOneBy({ uuid: String(create.uuid) });
         if (registered)
             return res.status(400).json({ message: "Vídeo already registered." });
         await VideoRep_1.videoRep.save(create);
         return res.status(201).json(create);
     }
     async findBy(req, res) {
-        const { videoId, language } = req.body;
-        const video = await VideoRep_1.videoRep.findOneBy({ videoId: String(videoId) });
+        const { uuid } = req.body;
+        const video = await VideoRep_1.videoRep.findOneBy({ uuid: String(uuid) });
         if (!video)
-            return res.status(200).json({ message: "Nenhum registro encontrado." });
-        const chunks = await ChunkRep_1.chunkRep.findBy({ videoId: video.videoId, language: String(language) });
+            return res.status(200).json({ message: "No records found." });
+        const chunks = await ChunkRep_1.chunkRep.findBy({ videoId: video.uuid });
         const response = {
             video,
             chunks: chunks.map((item) => {
-                return { timestamp: item.timestamp, text: item.text };
+                return {
+                    language: item.language,
+                    timestamp: item.timestamp,
+                    text: item.text
+                };
             })
         };
         return res.json(response);
@@ -35,8 +40,10 @@ class Video {
     async findall(req, res) {
         const video = await VideoRep_1.videoRep.find();
         if (!video)
-            return res.status(200).json({ message: "Nenhum registro encontrado." });
-        const response = video.map(item => { return { uuid: item.uuid, videoid: item.videoId, uri: item.uri }; });
+            return res.status(200).json({ message: "NNo records found." });
+        const response = video.map(item => {
+            return { uuid: item.uuid, title: item.title, description: item.description };
+        });
         return res.json(response);
     }
 }

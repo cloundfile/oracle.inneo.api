@@ -2,12 +2,15 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('VIDEOS')
 export class Videos {
-    @PrimaryGeneratedColumn({name: 'UUID'})
-    uuid: number
+    @PrimaryGeneratedColumn({name: 'ID'})
+    id: number 
 
-    @Column({name: 'VIDEOID'})
-    videoId: string
+    @Column({name: 'UUID', nullable: false})
+    uuid: string 
+    
+    @Column({name: 'TITLE', nullable: false})
+    title: string
 
-    @Column({name: 'URI'})
-    uri: string
+    @Column({name: 'DESCRIPTION', nullable: false})
+    description: string
 }

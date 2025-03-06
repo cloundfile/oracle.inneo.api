@@ -15,17 +15,21 @@ let Videos = class Videos {
 };
 exports.Videos = Videos;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)({ name: 'UUID' }),
+    (0, typeorm_1.PrimaryGeneratedColumn)({ name: 'ID' }),
     __metadata("design:type", Number)
+], Videos.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'UUID', nullable: false }),
+    __metadata("design:type", String)
 ], Videos.prototype, "uuid", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'VIDEOID' }),
+    (0, typeorm_1.Column)({ name: 'TITLE', nullable: false }),
     __metadata("design:type", String)
-], Videos.prototype, "videoId", void 0);
+], Videos.prototype, "title", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'URI' }),
+    (0, typeorm_1.Column)({ name: 'DESCRIPTION', nullable: false }),
     __metadata("design:type", String)
-], Videos.prototype, "uri", void 0);
+], Videos.prototype, "description", void 0);
 exports.Videos = Videos = __decorate([
     (0, typeorm_1.Entity)('VIDEOS')
 ], Videos);

@@ -4,30 +4,35 @@ import { chunkRep } from '../repository/ChunkRep';
 
 export class Video {
     async create(req: Request, res: Response) {
-        const { videoId } = req.body
-        if( !videoId ) return res.status(400).json({ message: "Campos com * obrigatório."});
+        const { uuid, title, description } = req.body
+        if( !uuid || !title ||!description ) return res.status(400).json({ message: "Fields ( uuid, title, description ) are required."});
 
         const create = videoRep.create({
-            videoId,
-            uri: `https://www.youtube.com/watch?v=${videoId}`
+            uuid,
+            title,
+            description
         })
 
-        const registered = await videoRep.findOneBy({videoId: String(create.videoId)});
+        const registered = await videoRep.findOneBy({uuid: String(create.uuid)});
         if(registered) return res.status(400).json({ message: "Vídeo already registered."});
         await videoRep.save(create);
         return res.status(201).json(create);
     }
 
     async findBy(req: Request, res: Response) {
-        const { videoId, language } = req.body; 
-        const video = await videoRep.findOneBy({videoId: String(videoId)});
-        if(!video) return res.status(200).json({ message: "Nenhum registro encontrado."});
-        const chunks = await chunkRep.findBy({videoId: video.videoId, language: String(language)});
+        const { uuid } = req.body; 
+        const video = await videoRep.findOneBy({uuid: String(uuid)});
+        if(!video) return res.status(200).json({ message: "No records found."});
+        const chunks = await chunkRep.findBy({videoId: video.uuid });
         
         const response = {
             video,
             chunks: chunks.map((item) => {
-                return { timestamp: item.timestamp, text: item.text }
+                return { 
+                    language: item.language, 
+                    timestamp: item.timestamp, 
+                    text: item.text 
+                }
             })
         }
         return res.json(response);
@@ -35,8 +40,10 @@ export class Video {
 
     async findall(req: Request, res: Response) {
         const video = await videoRep.find()
-        if(!video) return res.status(200).json({ message: "Nenhum registro encontrado."});
-        const response = video.map(item => {  return { uuid: item.uuid, videoid: item.videoId, uri: item.uri } });
+        if(!video) return res.status(200).json({ message: "NNo records found."});
+        const response = video.map(item => {  
+            return { uuid: item.uuid, title: item.title, description: item.description }
+        });
         return res.json(response);
     }
 }
