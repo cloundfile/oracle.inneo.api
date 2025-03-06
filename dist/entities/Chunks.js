@@ -15,13 +15,13 @@ let Chunks = class Chunks {
 };
 exports.Chunks = Chunks;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)({ name: 'UUID' }),
+    (0, typeorm_1.PrimaryGeneratedColumn)({ name: 'ID' }),
     __metadata("design:type", Number)
-], Chunks.prototype, "uuid", void 0);
+], Chunks.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'VIDEOID' }),
+    (0, typeorm_1.Column)({ name: 'UUID' }),
     __metadata("design:type", String)
-], Chunks.prototype, "videoId", void 0);
+], Chunks.prototype, "uuid", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'LANGUAGE' }),
     __metadata("design:type", String)

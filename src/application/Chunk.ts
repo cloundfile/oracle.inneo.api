@@ -3,15 +3,15 @@ import { chunkRep } from '../repository/ChunkRep';
 
 export class Chunk {
     async create(req: Request, res: Response) {
-        const { videoId, language, chunks } = req.body;
-        if (!videoId || !language || !chunks) {
-            return res.status(400).json({ message: "Campos com * obrigatório." });
+        const { uuid, language, chunks } = req.body;
+        if (!uuid || !language || !chunks) {
+            return res.status(400).json({ message: "Fields ( uuid, language, chunks ) are required." });
         }    
 
         for (const item of chunks) {
             const timestampJson = JSON.stringify(item.timestamp);
             const create = chunkRep.create({
-                videoId,
+                uuid,
                 language,
                 timestamp: timestampJson,
                 text: item.text
@@ -23,24 +23,24 @@ export class Chunk {
     }
 
      async delete(req: Request, res: Response) {
-        const { videoId, language } = req.body; 
-        if( !videoId || !language ) return res.status(400).json({ message: "videoId and language são obrigatórios."});   
+        const { uuid, language } = req.body; 
+        if( !uuid || !language ) return res.status(400).json({ message: "Field (uuid) and language are required."});   
 
-        const chunks = await chunkRep.findBy({videoId: String(videoId), language: String(language)});
-        if(!chunks) return res.status(400).json({ message: "videoId não encontrado."});
+        const chunks = await chunkRep.findBy({uuid: String(uuid), language: String(language)});
+        if(!chunks) return res.status(400).json({ message: "uuid não encontrado."});
 
         chunks.map(async item => {
-            await chunkRep.delete(item.uuid);
+            await chunkRep.delete(item.id);
         });   
              
-        return res.status(201).json({ message: videoId + " Deletado com sucesso."});
+        return res.status(201).json({ message: uuid + " Deleted successfully."});
     }
 
-     async findall(req: Request, res: Response) {
-        const { videoId, language } = req.body; 
-        const chunks = await chunkRep.findBy({videoId: String(videoId), language: String(language)});
-        if(!chunks) return res.status(200).json({ message: "Nenhum registro encontrado."});
-        const response = chunks.map(item => {  return { uuid: item.uuid, videoid: item.videoId, timestamp: item.timestamp, text: item.text} });
+     async findby(req: Request, res: Response) {
+        const { uuid, language } = req.body; 
+        const chunks = await chunkRep.findBy({uuid: String(uuid), language: String(language)});
+        if(!chunks) return res.status(200).json({ message: "No records found."});
+        const response = chunks.map(item => {  return { uuid: item.uuid, timestamp: item.timestamp, text: item.text} });
         return res.json(response);
     }
 }

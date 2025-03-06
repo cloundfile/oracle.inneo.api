@@ -11,15 +11,17 @@ const video = new Video_1.Video();
 const chunk = new Chunk_1.Chunk();
 //Login api
 routes.post('/api/login', authentication.login);
-routes.post('/api/usuario', login_1.required, authentication.create);
-routes.put('/api/usuario', login_1.required, authentication.update);
-routes.delete('/api/usuario', login_1.required, authentication.delete);
-routes.get('/api/usuario', login_1.required, authentication.findall);
+//Usuario
+routes.post('/api/usuario/create', authentication.create);
+routes.put('/api/usuario/update', login_1.required, authentication.update);
+routes.delete('/api/usuario/delete', login_1.required, authentication.delete);
+routes.get('/api/usuario/findall', login_1.required, authentication.findall);
 //Video api
 routes.post('/api/video/findby', video.findBy);
 routes.get('/api/video/findall', video.findall);
 routes.post('/api/video/create', login_1.required, video.create);
-routes.post('/api/transcription/findby', chunk.findall);
+//Chunks
+routes.post('/api/transcription/findby', chunk.findby);
 routes.post('/api/transcription/create', login_1.required, chunk.create);
 routes.delete('/api/transcription/delete', login_1.required, chunk.delete);
 exports.default = routes;

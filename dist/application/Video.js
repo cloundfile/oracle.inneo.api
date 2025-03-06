@@ -24,7 +24,7 @@ class Video {
         const video = await VideoRep_1.videoRep.findOneBy({ uuid: String(uuid) });
         if (!video)
             return res.status(200).json({ message: "No records found." });
-        const chunks = await ChunkRep_1.chunkRep.findBy({ videoId: video.uuid });
+        const chunks = await ChunkRep_1.chunkRep.findBy({ uuid: video.uuid });
         const response = {
             video,
             chunks: chunks.map((item) => {

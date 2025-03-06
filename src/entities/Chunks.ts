@@ -2,11 +2,11 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('CHUNKS')
 export class Chunks {
-    @PrimaryGeneratedColumn({name: 'UUID'})
-    uuid: number
+    @PrimaryGeneratedColumn({name: 'ID'})
+    id: number
 
-    @Column({name: 'VIDEOID'})
-    videoId: string
+    @Column({name: 'UUID'})
+    uuid: string
 
     @Column({name: 'LANGUAGE'})
     language: string
