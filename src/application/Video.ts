@@ -20,10 +20,10 @@ export class Video {
     }
 
     async findBy(req: Request, res: Response) {
-        const { uuid } = req.body; 
+        const { uuid, language } = req.body; 
         const video = await videoRep.findOneBy({uuid: String(uuid)});
         if(!video) return res.status(200).json({ message: "No records found."});
-        const chunks = await chunkRep.findBy({uuid: video.uuid });
+        const chunks = await chunkRep.findBy({uuid: video.uuid, language: language });
         
         const response = {
             video,
