@@ -35,6 +35,5 @@ __decorate([
     __metadata("design:type", String)
 ], Chunks.prototype, "text", void 0);
 exports.Chunks = Chunks = __decorate([
-    (0, typeorm_1.Entity)('CHUNKS'),
-    (0, typeorm_1.Unique)('UNIQUE_UUID_AND_TEXT', ['uuid', 'text'])
+    (0, typeorm_1.Entity)('CHUNKS')
 ], Chunks);
