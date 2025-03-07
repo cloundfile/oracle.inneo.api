@@ -30,7 +30,7 @@ class Video {
                 language: language,
             },
             order: {
-                uuid: 'ASC',
+                timestamp: 'ASC',
             },
         });
         const response = {
