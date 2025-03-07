@@ -13,7 +13,7 @@ class Chunk {
             const create = ChunkRep_1.chunkRep.create({
                 uuid,
                 language,
-                timestamp: item.timestamp,
+                timestamp: timestampJson,
                 text: item.text
             });
             await ChunkRep_1.chunkRep.save(create);

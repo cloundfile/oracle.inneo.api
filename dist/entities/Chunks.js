@@ -28,7 +28,7 @@ __decorate([
 ], Chunks.prototype, "language", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'TIMESTAMP' }),
-    __metadata("design:type", Number)
+    __metadata("design:type", String)
 ], Chunks.prototype, "timestamp", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'TEXT' }),
