@@ -24,7 +24,15 @@ class Video {
         const video = await VideoRep_1.videoRep.findOneBy({ uuid: String(uuid) });
         if (!video)
             return res.status(200).json({ message: "No records found." });
-        const chunks = await ChunkRep_1.chunkRep.findBy({ uuid: video.uuid, language: language });
+        const chunks = await ChunkRep_1.chunkRep.find({
+            where: {
+                uuid: video.uuid,
+                language: language,
+            },
+            order: {
+                uuid: 'ASC',
+            },
+        });
         const response = {
             video,
             chunks: chunks.map((item) => {
