@@ -5,7 +5,7 @@ exports.verifyToken = verifyToken;
 const encoding = process.env.TOKEN_JWT;
 const jwt = require('jsonwebtoken');
 function createToken(payload) {
-    return jwt.sign(payload, encoding, { expiresIn: '8h' });
+    return jwt.sign(payload, encoding, { expiresIn: '24h' });
 }
 function verifyToken(token) {
     return jwt.verify(token, encoding);

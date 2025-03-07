@@ -31,5 +31,6 @@ __decorate([
     __metadata("design:type", String)
 ], Videos.prototype, "description", void 0);
 exports.Videos = Videos = __decorate([
-    (0, typeorm_1.Entity)('VIDEOS')
+    (0, typeorm_1.Entity)('VIDEOS'),
+    (0, typeorm_1.Unique)('UNIQUE_UUID_AND_TITLE', ['uuid', 'title'])
 ], Videos);

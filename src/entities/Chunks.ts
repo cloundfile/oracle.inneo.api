@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 @Entity('CHUNKS')
+@Unique('UNIQUE_UUID_AND_TEXT', ['uuid', 'text'])
 export class Chunks {
     @PrimaryGeneratedColumn({name: 'ID'})
     id: number
@@ -12,7 +13,7 @@ export class Chunks {
     language: string
 
     @Column({name: 'TIMESTAMP'})
-    timestamp: string
+    timestamp: Number
 
     @Column({name: 'TEXT'})
     text: string

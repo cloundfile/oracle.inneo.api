@@ -28,12 +28,13 @@ __decorate([
 ], Chunks.prototype, "language", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'TIMESTAMP' }),
-    __metadata("design:type", String)
+    __metadata("design:type", Number)
 ], Chunks.prototype, "timestamp", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'TEXT' }),
     __metadata("design:type", String)
 ], Chunks.prototype, "text", void 0);
 exports.Chunks = Chunks = __decorate([
-    (0, typeorm_1.Entity)('CHUNKS')
+    (0, typeorm_1.Entity)('CHUNKS'),
+    (0, typeorm_1.Unique)('UNIQUE_UUID_AND_TEXT', ['uuid', 'text'])
 ], Chunks);

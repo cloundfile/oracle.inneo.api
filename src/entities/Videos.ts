@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 @Entity('VIDEOS')
+@Unique('UNIQUE_UUID_AND_TITLE', ['uuid', 'title'])
 export class Videos {
     @PrimaryGeneratedColumn({name: 'ID'})
     id: number 
