@@ -13,7 +13,7 @@ export class Chunks {
     language: string
 
     @Column({name: 'TIMESTAMP'})
-    timestamp: string
+    timestamp: Number
 
     @Column({name: 'TEXT'})
     text: string
