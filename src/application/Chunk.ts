@@ -10,13 +10,16 @@ export class Chunk {
 
         for (const item of chunks) {
             const timestampJson = JSON.stringify(item.timestamp);
-            const create = chunkRep.create({
-                uuid,
-                language,
-                timestamp: timestampJson,
-                text: item.text
-            });
-            await chunkRep.save(create);
+            const registered = await chunkRep.findOneBy({uuid: item.uuid, text: String(item.text)});
+            if(!registered){
+                const create = chunkRep.create({
+                    uuid,
+                    language,
+                    timestamp: timestampJson,
+                    text: item.text
+                });
+                await chunkRep.save(create);
+            }
         }
     
         return res.status(201).json(chunks);
