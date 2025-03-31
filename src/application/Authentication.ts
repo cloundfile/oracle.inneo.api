@@ -1,4 +1,5 @@
 import { usuarioRep } from '../repository/UsuarioRep';
+import { rolesRep } from '../repository/RolesRep';
 import { createToken } from "../utils/jwtManager"
 import { Request, Response } from 'express';
 const bcrypt = require('bcryptjs');
@@ -68,8 +69,14 @@ export class Authentication {
 
     async findall(req: Request, res: Response) {
 		const usuario = await usuarioRep.find()
-        if(!usuario) return res.status(200).json({ message: "Nenhum registro encontrado."});
-        const response = usuario.map(item => {  return { uuid: item.uuid, username: item.username, role: item.role_id }});
+        const response = await Promise.all(usuario.map(async (item) => {
+            const role = await rolesRep.findOneBy({ uuid: item.role_id });
+            return { 
+                uuid: item.uuid, 
+                username: item.username, 
+                role: role ? role.permission : null
+            };
+        }));
 		return res.json(response);
 	}
 }
