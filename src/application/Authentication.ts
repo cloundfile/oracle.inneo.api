@@ -25,12 +25,13 @@ export class Authentication {
     }
 
     async create(req: Request, res: Response) {
-        const { username, password } = req.body
-        if( !username || !password ) return res.status(400).json({ message: "Campos com * obrigatório."});
+        const { username, password, role_id } = req.body
+        if( !username || !password || !role_id ) return res.status(400).json({ message: "Campos com * obrigatório."});
         const criptpass = bcrypt.hashSync(password, 10);
         const create = usuarioRep.create({
             username,
-            password: criptpass
+            password: criptpass,
+            role_id
         })
         const usuario = await usuarioRep.findOneBy({username: String(create.username)});
         if(usuario) return res.status(400).json({ message: "Username indisponível."});
@@ -39,13 +40,14 @@ export class Authentication {
     }
 
     async update(req: Request, res: Response) {
-        const { uuid, username, password } = req.body;
-        if(!username || !password ) return res.status(400).json({ message: "Campos com * obrigatório."});
+        const { uuid, username, password, role_id } = req.body;
+        if(!username || !password || !role_id) return res.status(400).json({ message: "Campos com * obrigatório."});
         const criptpass = bcrypt.hashSync(password, 10);
         const create =  usuarioRep.create({
             uuid,
             username,
-            password: criptpass
+            password: criptpass,
+            role_id
         })
         const usuario = await usuarioRep.findOneBy({uuid: Number(create.uuid)});
         if(!usuario) return res.status(400).json({ message: "UUID não encontrado."});
@@ -67,7 +69,7 @@ export class Authentication {
     async findall(req: Request, res: Response) {
 		const usuario = await usuarioRep.find()
         if(!usuario) return res.status(200).json({ message: "Nenhum registro encontrado."});
-        const response = usuario.map(item => {  return { uuid: item.uuid, username: item.username }});
+        const response = usuario.map(item => {  return { uuid: item.uuid, username: item.username, role: item.role_id }});
 		return res.json(response);
 	}
 }

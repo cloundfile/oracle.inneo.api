@@ -10,4 +10,7 @@ export class Usuarios {
 
     @Column({name: 'PASSWORD'})
     password: string
+
+    @Column({name: 'ROLES_ID'})
+    role_id: number
 }
