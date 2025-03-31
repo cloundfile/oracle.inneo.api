@@ -2,26 +2,20 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Authentication_1 = require("../application/Authentication");
 const login_1 = require("../middlewares/login");
-const Video_1 = require("../application/Video");
-const Chunk_1 = require("../application/Chunk");
+const Roles_1 = require("../application/Roles");
 const express_1 = require("express");
 const routes = (0, express_1.Router)();
 const authentication = new Authentication_1.Authentication();
-const video = new Video_1.Video();
-const chunk = new Chunk_1.Chunk();
+const roles = new Roles_1.Roles();
 //Login api
 routes.post('/api/login', authentication.login);
 //Usuario
-routes.post('/api/usuario/create', authentication.create);
+routes.post('/api/usuario/create', login_1.required, authentication.create);
 routes.put('/api/usuario/update', login_1.required, authentication.update);
 routes.delete('/api/usuario/delete', login_1.required, authentication.delete);
 routes.get('/api/usuario/findall', login_1.required, authentication.findall);
-//Video api
-routes.post('/api/video/findby', video.findBy);
-routes.get('/api/video/findall', video.findall);
-routes.post('/api/video/create', login_1.required, video.create);
-//Chunks
-routes.post('/api/transcription/findby', chunk.findby);
-routes.post('/api/transcription/create', login_1.required, chunk.create);
-routes.delete('/api/transcription/delete', login_1.required, chunk.delete);
+//Roles
+routes.get('/api/roles/findall', roles.findAll);
+routes.post('/api/roles/create', login_1.required, roles.create);
+routes.delete('/api/roles/delete', login_1.required, roles.delete);
 exports.default = routes;

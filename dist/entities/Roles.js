@@ -9,27 +9,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Usuarios = void 0;
+exports.Roles = void 0;
 const typeorm_1 = require("typeorm");
-let Usuarios = class Usuarios {
+let Roles = class Roles {
 };
-exports.Usuarios = Usuarios;
+exports.Roles = Roles;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)({ name: 'UUID' }),
     __metadata("design:type", Number)
-], Usuarios.prototype, "uuid", void 0);
+], Roles.prototype, "uuid", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'USERNAME' }),
+    (0, typeorm_1.Column)({ name: 'PERMISSION' }),
     __metadata("design:type", String)
-], Usuarios.prototype, "username", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ name: 'PASSWORD' }),
-    __metadata("design:type", String)
-], Usuarios.prototype, "password", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ name: 'ROLES_ID' }),
-    __metadata("design:type", Number)
-], Usuarios.prototype, "role_id", void 0);
-exports.Usuarios = Usuarios = __decorate([
-    (0, typeorm_1.Entity)('USUARIOS')
-], Usuarios);
+], Roles.prototype, "permission", void 0);
+exports.Roles = Roles = __decorate([
+    (0, typeorm_1.Entity)('ROLES')
+], Roles);
