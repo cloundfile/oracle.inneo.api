@@ -20,8 +20,9 @@ export class Authentication {
             const authenticated = await  bcrypt.compare(use_password, dba_password);
 
             if (!authenticated) return res.status(403).json({ message: 'Unauthorized: Incorrect username or password.'});
+            const role = await rolesRep.findOneBy({ uuid: usuarios.role_id });
             const token = createToken({ uuid: usuarios.uuid, username: usuarios.username })
-	        return res.status(200).json({token: token});
+	        return res.status(200).json({usuario: usuarios.username, role: role?.permission, token: token});
         }
     }
 
