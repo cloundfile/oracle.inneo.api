@@ -128,7 +128,12 @@ export class Authentication {
     }
 
     async findall(req: Request, res: Response) {
-        const usuarios = await usuarioRep.find({ relations: ['roles'] });
+        const usuarios = await usuarioRep.find({ 
+            relations: ['roles'] ,             
+            order: {
+                username: 'ASC',
+            }
+        });    
         
         if (!usuarios || usuarios.length === 0) {
             return res.status(400).json({ message: "No records found." });

@@ -39,7 +39,11 @@ export class Roles {
 
     async findAll(req: Request, res: Response) {
         const { uuid } = req.body; 
-        const roles = await rolesRep.find();
+        const roles = await rolesRep.find({
+            order: {
+              permission: 'ASC',
+            },
+          });
         if(!roles) return res.status(200).json({ message: "No records found."});
         return res.json(roles);
     }
