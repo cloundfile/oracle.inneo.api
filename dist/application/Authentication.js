@@ -114,7 +114,12 @@ class Authentication {
         return res.status(201).json({ message: usuario?.username + " Successfully deleted." });
     }
     async findall(req, res) {
-        const usuarios = await UsuarioRep_1.usuarioRep.find({ relations: ['roles'] });
+        const usuarios = await UsuarioRep_1.usuarioRep.find({
+            relations: ['roles'],
+            order: {
+                username: 'ASC',
+            }
+        });
         if (!usuarios || usuarios.length === 0) {
             return res.status(400).json({ message: "No records found." });
         }

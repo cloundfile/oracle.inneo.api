@@ -34,7 +34,11 @@ class Roles {
     }
     async findAll(req, res) {
         const { uuid } = req.body;
-        const roles = await RolesRep_1.rolesRep.find();
+        const roles = await RolesRep_1.rolesRep.find({
+            order: {
+                permission: 'ASC',
+            },
+        });
         if (!roles)
             return res.status(200).json({ message: "No records found." });
         return res.json(roles);
