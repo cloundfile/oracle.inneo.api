@@ -4,13 +4,12 @@ import { usuarioRep } from '../repository/UsuarioRep';
 
 export class Roles {
     async create(req: Request, res: Response) {
-        const { uuid, permission } = req.body;
-        if (!uuid || !permission) {
-            return res.status(400).json({ message: "Fields ( uuid, permission ) are required." });
+        const { permission } = req.body;
+        if (!permission) {
+            return res.status(400).json({ message: "Fields ( permission ) is required." });
         } 
 
         const create = rolesRep.create({
-                uuid,
                 permission
             });
             await rolesRep.save(create);
