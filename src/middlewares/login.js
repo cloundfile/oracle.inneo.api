@@ -7,7 +7,7 @@ exports.required = (req, res, next) => {
         req.username = decode;
         next();
     } catch (error) {
-        return res.status(401).send({ message: "Acesso não autorizado"});
+        return res.status(401).send({ message: "Unauthorized!"});
     }
 }
 

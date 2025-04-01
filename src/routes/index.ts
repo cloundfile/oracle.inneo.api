@@ -1,20 +1,22 @@
 import { Authentication } from '../application/Authentication';
+import { Usuario } from '../application/Usuario';
 import { required } from '../middlewares/login';
 import { Roles } from '../application/Roles';
 import { Router } from 'express';
 const routes = Router();
 
 const authentication = new Authentication();
+const usuario = new Usuario();
 const roles = new Roles();
 
-//Login api
-routes.post('/auth/login',           authentication.login);
+//Login authentication
+routes.post('/auth/login',          authentication.login);
 
 //Usuario
-routes.post('/v1/usuario/create',   required, authentication.create);
-routes.put('/v1/usuario/update',    required, authentication.update);
-routes.delete('/v1/usuario/delete', required, authentication.delete);
-routes.get('/v1/usuario/findall',   required, authentication.findall);
+routes.post('/v1/usuario/create',   required, usuario.create);
+routes.put('/v1/usuario/update',    required, usuario.update);
+routes.delete('/v1/usuario/delete', required, usuario.delete);
+routes.get('/v1/usuario/findall',   required, usuario.findall);
 
 
 //Roles

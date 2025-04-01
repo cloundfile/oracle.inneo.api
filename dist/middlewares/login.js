@@ -8,7 +8,7 @@ exports.required = (req, res, next) => {
         next();
     }
     catch (error) {
-        return res.status(401).send({ message: "Acesso não autorizado" });
+        return res.status(401).send({ message: "Unauthorized!" });
     }
 };
 exports.optional = (req, res, next) => {
