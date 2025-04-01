@@ -8,14 +8,14 @@ const routes = (0, express_1.Router)();
 const authentication = new Authentication_1.Authentication();
 const roles = new Roles_1.Roles();
 //Login api
-routes.post('/api/login', authentication.login);
+routes.post('/auth/login', authentication.login);
 //Usuario
-routes.post('/api/usuario/create', login_1.required, authentication.create);
-routes.put('/api/usuario/update', login_1.required, authentication.update);
-routes.delete('/api/usuario/delete', login_1.required, authentication.delete);
-routes.get('/api/usuario/findall', login_1.required, authentication.findall);
+routes.post('/v1/usuario/create', login_1.required, authentication.create);
+routes.put('/v1/usuario/update', login_1.required, authentication.update);
+routes.delete('/v1/usuario/delete', login_1.required, authentication.delete);
+routes.get('/v1/usuario/findall', login_1.required, authentication.findall);
 //Roles
-routes.get('/api/roles/findall', roles.findAll);
-routes.post('/api/roles/create', login_1.required, roles.create);
-routes.delete('/api/roles/delete', login_1.required, roles.delete);
+routes.get('/v1/roles/findall', roles.findAll);
+routes.post('/v1/roles/create', login_1.required, roles.create);
+routes.delete('/v1/roles/delete', login_1.required, roles.delete);
 exports.default = routes;

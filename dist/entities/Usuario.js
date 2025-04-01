@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Usuarios = void 0;
 const typeorm_1 = require("typeorm");
+const Roles_1 = require("./Roles");
 let Usuarios = class Usuarios {
 };
 exports.Usuarios = Usuarios;
@@ -27,9 +28,14 @@ __decorate([
     __metadata("design:type", String)
 ], Usuarios.prototype, "password", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'ROLES_ID' }),
-    __metadata("design:type", Number)
-], Usuarios.prototype, "role_id", void 0);
+    (0, typeorm_1.ManyToMany)(() => Roles_1.Roles),
+    (0, typeorm_1.JoinTable)({
+        name: 'USUARIOS_ROLES',
+        joinColumn: { name: 'USUARIOS_UUID', referencedColumnName: 'uuid' },
+        inverseJoinColumn: { name: 'ROLE_UUID', referencedColumnName: 'uuid' }
+    }),
+    __metadata("design:type", Array)
+], Usuarios.prototype, "roles", void 0);
 exports.Usuarios = Usuarios = __decorate([
     (0, typeorm_1.Entity)('USUARIOS')
 ], Usuarios);

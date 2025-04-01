@@ -19,7 +19,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Roles.prototype, "uuid", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'PERMISSION' }),
+    (0, typeorm_1.Column)({ name: 'PERMISSION', unique: true }),
     __metadata("design:type", String)
 ], Roles.prototype, "permission", void 0);
 exports.Roles = Roles = __decorate([
