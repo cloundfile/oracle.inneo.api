@@ -5,12 +5,11 @@ const RolesRep_1 = require("../repository/RolesRep");
 const UsuarioRep_1 = require("../repository/UsuarioRep");
 class Roles {
     async create(req, res) {
-        const { uuid, permission } = req.body;
-        if (!uuid || !permission) {
-            return res.status(400).json({ message: "Fields ( uuid, permission ) are required." });
+        const { permission } = req.body;
+        if (!permission) {
+            return res.status(400).json({ message: "Fields ( permission ) is required." });
         }
         const create = RolesRep_1.rolesRep.create({
-            uuid,
             permission
         });
         await RolesRep_1.rolesRep.save(create);
