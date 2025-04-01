@@ -5,6 +5,6 @@ export class Roles {
     @PrimaryGeneratedColumn({name: 'UUID'})
     uuid: number
 
-    @Column({name: 'PERMISSION'})
+    @Column({name: 'PERMISSION', unique: true})
     permission: string
 }

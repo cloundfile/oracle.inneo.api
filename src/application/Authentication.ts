@@ -7,54 +7,113 @@ const bcrypt = require('bcryptjs');
 export class Authentication {
     async login(req: Request, res: Response) {        
         const { username, password } = req.body
-        if( !username  || !password ) return res.status(401).send({ message: 'Username and Password required.'});
-        const create = usuarioRep.create({
-            username,
-            password
-        })
-        const usuarios = await usuarioRep.findOneBy({ username: String(create.username)});
-        if (!usuarios) return res.status(403).json({message: 'Unauthorized: Incorrect username or password.'});
-        if(username) {
-            const use_password = create.username ? create.password : '';
-            const dba_password = usuarios?.password;
-            const authenticated = await  bcrypt.compare(use_password, dba_password);
 
-            if (!authenticated) return res.status(403).json({ message: 'Unauthorized: Incorrect username or password.'});
-            const role = await rolesRep.findOneBy({ uuid: usuarios.role_id });
-            const token = createToken({ uuid: usuarios.uuid, username: usuarios.username })
-	        return res.status(200).json({usuario: usuarios.username, role: role?.permission, token: token});
+        if( !username  || !password ) return res.status(401).send({ 
+            message: 'Username and Password required.'
+        });
+       
+        try {
+            const usuario = await usuarioRep.findOne({
+                where: { username: String(username) },
+                relations: ['roles'],
+            });
+
+            if (!usuario) return res.status(403).json({
+                message: 'Unauthorized: Incorrect username or password.'
+            });
+
+            const authenticated = await bcrypt.compare(password, usuario.password);
+            if (!authenticated) {
+                return res.status(403).json({ message: 'Unauthorized: Incorrect username or password.' });
+            }
+
+            const token = createToken({ uuid: usuario.uuid, username: usuario.username });
+            const rolesPermissions = usuario.roles.map(role => role.permission);
+
+            return res.status(200).json({
+                usuario: usuario.username,
+                roles: rolesPermissions, 
+                token: token,
+            });
+        } catch (error) {
+            return res.status(500).json({ message: "Error authenticate user", error });
         }
+        finally {
+            console.log('request completed successfully');
+        }        
     }
 
     async create(req: Request, res: Response) {
-        const { username, password, role_id } = req.body
-        if( !username || !password || !role_id ) return res.status(400).json({ message: "Fields with * required."});
+        const { username, password, roles } = req.body;
+        if (!username || !password || !roles) {
+            return res.status(400).json({ message: "Fields with * required." });
+        }
+    
         const criptpass = bcrypt.hashSync(password, 10);
-        const create = usuarioRep.create({
-            username,
-            password: criptpass,
-            role_id
-        })
-        const usuario = await usuarioRep.findOneBy({username: String(create.username)});
-        if(usuario) return res.status(400).json({ message: "Username unavailable."});
-        await usuarioRep.save(create);
-        return res.status(201).json(create);
+    
+        try {
+            const unavailable = await usuarioRep.findOneBy({ username: String(username) });
+            if (unavailable) {
+                return res.status(400).json({ message: "Username unavailable." });
+            }
+    
+            const roleEntities = await rolesRep.findByIds(roles);
+            
+            if (roleEntities.length !== roles.length) {
+                return res.status(400).json({ message: "Some roles not found." });
+            }
+    
+            const usuario = usuarioRep.create({
+                username,
+                password: criptpass,
+                roles: roleEntities
+            });
+    
+            await usuarioRep.save(usuario);
+            return res.status(201).json({username: usuario.username, roles: usuario.roles.map(role => role.permission) });
+        } catch (error) {
+            return res.status(500).json({ message: "Error creating user", error });
+        } finally {
+            console.log('request completed successfully');
+        }
     }
 
     async update(req: Request, res: Response) {
-        const { uuid, username, password, role_id } = req.body;
-        if(!username || !password || !role_id) return res.status(400).json({ message: "Fields with * required."});
-        const criptpass = bcrypt.hashSync(password, 10);
-        const create =  usuarioRep.create({
-            uuid,
-            username,
-            password: criptpass,
-            role_id
-        })
-        const usuario = await usuarioRep.findOneBy({uuid: Number(create.uuid)});
-        if(!usuario) return res.status(400).json({ message: "UUID not found."});
-        await usuarioRep.update(uuid, create);
-        return res.status(201).json(create);
+        const { uuid, username, password, roles } = req.body;
+    
+        if (!username || !roles) {
+            return res.status(400).json({ message: "Fields with * required." });
+        }
+    
+        let criptpass: string | undefined;
+        if (password) {
+            criptpass = bcrypt.hashSync(password, 10);
+        }
+    
+        try {
+            const usuario = await usuarioRep.findOneBy({ uuid });
+            if (!usuario) {
+                return res.status(400).json({ message: "User not found." });
+            }    
+
+            const roleEntities = await rolesRep.findByIds(roles);
+            if (roleEntities.length !== roles.length) {
+                return res.status(400).json({ message: "Some roles not found." });
+            }    
+
+            usuario.username = username;
+            if (criptpass) {
+                usuario.password = criptpass;
+            }
+            usuario.roles = roleEntities; 
+            await usuarioRep.save(usuario);  
+
+            return res.status(200).json({uuid: usuario.uuid, username: usuario.username, roles: usuario.roles.map(role => role.permission) });  
+        } catch (error) {
+            return res.status(500).json({ message: "Error updating user", error });
+        } finally {
+            console.log('request completed successfully');
+        }
     }
 
     async delete(req: Request, res: Response) {
@@ -69,16 +128,20 @@ export class Authentication {
     }
 
     async findall(req: Request, res: Response) {
-		const usuario = await usuarioRep.find();
-        if(!usuario) return res.status(400).json({ message: "No records found."});
-        const response = await Promise.all(usuario.map(async (item) => {
-            const role = await rolesRep.findOneBy({ uuid: item.role_id });
-            return { 
-                uuid: item.uuid, 
-                username: item.username, 
-                role: role ? role.permission : null
+        const usuarios = await usuarioRep.find({ relations: ['roles'] });
+        
+        if (!usuarios || usuarios.length === 0) {
+            return res.status(400).json({ message: "No records found." });
+        }
+        const response = usuarios.map((usuario) => {
+            const rolesPermissions = usuario.roles.map(role => role.permission); 
+            return {
+                uuid: usuario.uuid,
+                username: usuario.username,
+                roles: rolesPermissions.length > 0 ? rolesPermissions : null
             };
-        }));
-		return res.json(response);
-	}
+        });
+    
+        return res.json(response);
+    }
 }
