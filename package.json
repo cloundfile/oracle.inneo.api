@@ -2,7 +2,7 @@
   "name": "search",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": { 
+  "scripts": {
     "dev": "nodemon --exec ts-node ./src/index.ts",
     "start": "node ./dist/index.js",
     "build": "tsc"
@@ -30,6 +30,7 @@
     "oracledb": "^6.7.2",
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.20",
+    "uuid": "^11.1.0",
     "youtube-dl-exec": "^3.0.16",
     "ytdl-core": "^4.11.5"
   }
