@@ -9,35 +9,17 @@ export class Schedules {
             return res.status(400).json({ message: "Fields with * required." });
         }
 
-        try {
-            const today = new Date().toISOString().split('T')[0]; // yyyy-mm-dd
-
-            // Cria datas no formato completo com horário
-            const toBrasiliaDate = (time: string): Date => {
-                const fullDate = new Date(`${today}T${time}:00`);
-                fullDate.setHours(fullDate.getHours() - 3); // Corrige fuso UTC-3
-                return fullDate;
-            };
-
-            const saidaDate = toBrasiliaDate(saida);
-            const chegadaDate = toBrasiliaDate(chegada);
-            const retornoDate = toBrasiliaDate(retorno);
-
+        try {    
             const schedules = schedulesRep.create({
                 cod,
-                saida: saidaDate,
-                chegada: chegadaDate,
-                retorno: retornoDate,
+                saida,
+                chegada,
+                retorno,
             });
 
             await schedulesRep.save(schedules);
 
-            return res.status(201).json({
-                cod: schedules.cod,
-                saida: schedules.saida,
-                chegada: schedules.chegada,
-                retorno: schedules.retorno
-            });
+            return res.status(201).json('Schedule completed successfully');
 
         } catch (error) {
             console.error("Error creating schedule:", error);
@@ -65,28 +47,14 @@ export class Schedules {
                 return res.status(404).json({ message: "Schedule not found." });
             }
 
-            const today = new Date().toISOString().split('T')[0]; // yyyy-mm-dd
-
-            const toBrasiliaDate = (time: string): Date => {
-                const fullDate = new Date(`${today}T${time}:00`);
-                fullDate.setHours(fullDate.getHours() - 3); // Corrige fuso UTC-3
-                return fullDate;
-            };
-
-            schedule.cod = cod;
-            schedule.saida = toBrasiliaDate(saida);
-            schedule.chegada = toBrasiliaDate(chegada);
-            schedule.retorno = toBrasiliaDate(retorno);
+            schedule.cod     = cod;
+            schedule.saida   = saida;
+            schedule.chegada = chegada;
+            schedule.retorno = retorno;
 
             await schedulesRep.save(schedule);
 
-            return res.status(200).json({
-                id: schedule.id,
-                cod: schedule.cod,
-                saida: schedule.saida,
-                chegada: schedule.chegada,
-                retorno: schedule.retorno
-            });
+            return res.status(200).json('update request successfully');
 
         } catch (error) {
             console.error("Error updating schedule:", error);
