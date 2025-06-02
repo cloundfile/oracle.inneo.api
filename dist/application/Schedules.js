@@ -74,6 +74,7 @@ class Schedules {
             const schedules = await SchedulesRep_1.schedulesRep.find({
                 order: {
                     cod: 'ASC',
+                    saida: 'ASC'
                 }
             });
             if (!schedules || schedules.length === 0) {
