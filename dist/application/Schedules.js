@@ -12,7 +12,7 @@ class Schedules {
             const today = new Date().toISOString().split('T')[0];
             const toBrasiliaDate = (time) => {
                 const fullDate = new Date(`${today}T${time}:00`);
-                fullDate.setHours(fullDate.getHours() - 3);
+                fullDate.setHours(fullDate.getHours() - 0);
                 return fullDate;
             };
             const saidaDate = toBrasiliaDate(saida);
@@ -51,7 +51,7 @@ class Schedules {
             const today = new Date().toISOString().split('T')[0]; // yyyy-mm-dd
             const toBrasiliaDate = (time) => {
                 const fullDate = new Date(`${today}T${time}:00`);
-                fullDate.setHours(fullDate.getHours() - 3); // Corrige fuso UTC-3
+                fullDate.setHours(fullDate.getHours() - 0); // Corrige fuso UTC-3
                 return fullDate;
             };
             schedule.cod = cod;
