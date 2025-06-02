@@ -89,6 +89,7 @@ export class Schedules {
             const schedules = await schedulesRep.find({
                 order: {
                     cod: 'ASC',
+                    saida: 'ASC'
                 }
             });
 
