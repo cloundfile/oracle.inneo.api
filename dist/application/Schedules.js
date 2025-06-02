@@ -9,14 +9,23 @@ class Schedules {
             return res.status(400).json({ message: "Fields with * required." });
         }
         try {
+            const today = new Date().toISOString().split('T')[0];
+            const toBrasiliaDate = (time) => {
+                const fullDate = new Date(`${today}T${time}:00`);
+                fullDate.setHours(fullDate.getHours() - 3);
+                return fullDate;
+            };
+            const saidaDate = toBrasiliaDate(saida);
+            const chegadaDate = toBrasiliaDate(chegada);
+            const retornoDate = toBrasiliaDate(retorno);
             const schedules = SchedulesRep_1.schedulesRep.create({
                 cod,
-                saida,
-                chegada,
-                retorno,
+                saida: saidaDate,
+                chegada: chegadaDate,
+                retorno: retornoDate,
             });
             await SchedulesRep_1.schedulesRep.save(schedules);
-            return res.status(201).json('Schedule completed successfully');
+            return res.status(201).json('Request completed successfully');
         }
         catch (error) {
             console.error("Error creating schedule:", error);
@@ -39,12 +48,18 @@ class Schedules {
             if (!schedule) {
                 return res.status(404).json({ message: "Schedule not found." });
             }
+            const today = new Date().toISOString().split('T')[0]; // yyyy-mm-dd
+            const toBrasiliaDate = (time) => {
+                const fullDate = new Date(`${today}T${time}:00`);
+                fullDate.setHours(fullDate.getHours() - 3); // Corrige fuso UTC-3
+                return fullDate;
+            };
             schedule.cod = cod;
-            schedule.saida = saida;
-            schedule.chegada = chegada;
-            schedule.retorno = retorno;
+            schedule.saida = toBrasiliaDate(saida);
+            schedule.chegada = toBrasiliaDate(chegada);
+            schedule.retorno = toBrasiliaDate(retorno);
             await SchedulesRep_1.schedulesRep.save(schedule);
-            return res.status(200).json('update request successfully');
+            return res.status(200).json('Update request completed successfully');
         }
         catch (error) {
             console.error("Error updating schedule:", error);
