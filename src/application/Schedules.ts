@@ -14,7 +14,7 @@ export class Schedules {
 
             const toBrasiliaDate = (time: string): Date => {
                 const fullDate = new Date(`${today}T${time}:00`);
-                fullDate.setHours(fullDate.getHours() - 3);
+                fullDate.setHours(fullDate.getHours() - 0);
                 return fullDate;
             };
 
@@ -63,7 +63,7 @@ export class Schedules {
 
             const toBrasiliaDate = (time: string): Date => {
                 const fullDate = new Date(`${today}T${time}:00`);
-                fullDate.setHours(fullDate.getHours() - 3); // Corrige fuso UTC-3
+                fullDate.setHours(fullDate.getHours() - 0); // Corrige fuso UTC-3
                 return fullDate;
             };
 
