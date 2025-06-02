@@ -69,6 +69,31 @@ class Schedules {
             console.log('update request completed successfully');
         }
     }
+    async findOneBy(req, res) {
+        try {
+            const { id } = req.body;
+            const schedules = await SchedulesRep_1.schedulesRep.findOneBy({ id: id });
+            const formatTime = (date) => {
+                const hours = date.getUTCHours().toString().padStart(2, '0');
+                const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+                return `${hours}:${minutes}`;
+            };
+            if (!schedules)
+                return res.status(400).json({ message: "No records found." });
+            const response = {
+                id: schedules.id,
+                cod: schedules.cod,
+                saida: formatTime(schedules.saida),
+                chegada: formatTime(schedules.chegada),
+                retorno: formatTime(schedules.retorno)
+            };
+            return res.json(response);
+        }
+        catch (error) {
+            console.error("Error fetching schedules:", error);
+            return res.status(500).json({ message: "Internal server error", error });
+        }
+    }
     async findall(req, res) {
         try {
             const schedules = await SchedulesRep_1.schedulesRep.find({

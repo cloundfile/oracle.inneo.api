@@ -26,5 +26,6 @@ routes.delete('/v1/roles/delete', login_1.required, roles.delete);
 routes.post('/v1/schedules/create', schedules.create);
 routes.put('/v1/schedules/update', schedules.update);
 routes.get('/v1/schedules/findall', schedules.findall);
+routes.get('/v1/schedules/findOneBy', schedules.findOneBy);
 routes.delete('/v1/schedules/delete', schedules.delete);
 exports.default = routes;
