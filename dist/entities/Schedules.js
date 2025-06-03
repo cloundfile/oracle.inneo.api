@@ -23,16 +23,16 @@ __decorate([
     __metadata("design:type", String)
 ], Schedules.prototype, "cod", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'SAIDA', type: 'timestamp' }),
-    __metadata("design:type", Date)
+    (0, typeorm_1.Column)({ name: 'SAIDA' }),
+    __metadata("design:type", String)
 ], Schedules.prototype, "saida", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'CHEGADA', type: 'timestamp' }),
-    __metadata("design:type", Date)
+    (0, typeorm_1.Column)({ name: 'CHEGADA' }),
+    __metadata("design:type", String)
 ], Schedules.prototype, "chegada", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'RETORNO', type: 'timestamp' }),
-    __metadata("design:type", Date)
+    (0, typeorm_1.Column)({ name: 'RETORNO' }),
+    __metadata("design:type", String)
 ], Schedules.prototype, "retorno", void 0);
 exports.Schedules = Schedules = __decorate([
     (0, typeorm_1.Entity)('SCHEDULES')

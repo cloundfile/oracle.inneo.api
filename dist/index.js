@@ -24,7 +24,7 @@ data_source_1.AppDataSource.initialize().then(() => {
     });
     app.use(cors());
     app.use(routes_1.default);
-    return app.listen(process.env.PORT || 3000);
+    return app.listen(process.env.PORT || 3333);
 }).catch(() => {
     console.log("Could not connect to the database");
 });

@@ -9,22 +9,13 @@ class Schedules {
             return res.status(400).json({ message: "Fields with * required." });
         }
         try {
-            const today = new Date().toISOString().split('T')[0];
-            const toBrasiliaDate = (time) => {
-                const fullDate = new Date(`${today}T${time}:00`);
-                fullDate.setHours(fullDate.getHours() - 0);
-                return fullDate;
-            };
-            const saidaDate = toBrasiliaDate(saida);
-            const chegadaDate = toBrasiliaDate(chegada);
-            const retornoDate = toBrasiliaDate(retorno);
-            const schedules = SchedulesRep_1.schedulesRep.create({
+            const schedule = SchedulesRep_1.schedulesRep.create({
                 cod,
-                saida: saidaDate,
-                chegada: chegadaDate,
-                retorno: retornoDate,
+                saida,
+                chegada,
+                retorno,
             });
-            await SchedulesRep_1.schedulesRep.save(schedules);
+            await SchedulesRep_1.schedulesRep.save(schedule);
             return res.status(201).json('Request completed successfully');
         }
         catch (error) {
@@ -48,16 +39,10 @@ class Schedules {
             if (!schedule) {
                 return res.status(404).json({ message: "Schedule not found." });
             }
-            const today = new Date().toISOString().split('T')[0]; // yyyy-mm-dd
-            const toBrasiliaDate = (time) => {
-                const fullDate = new Date(`${today}T${time}:00`);
-                fullDate.setHours(fullDate.getHours() - 0); // Corrige fuso UTC-3
-                return fullDate;
-            };
             schedule.cod = cod;
-            schedule.saida = toBrasiliaDate(saida);
-            schedule.chegada = toBrasiliaDate(chegada);
-            schedule.retorno = toBrasiliaDate(retorno);
+            schedule.saida = saida;
+            schedule.chegada = chegada;
+            schedule.retorno = retorno;
             await SchedulesRep_1.schedulesRep.save(schedule);
             return res.status(200).json('Update request completed successfully');
         }
@@ -73,19 +58,14 @@ class Schedules {
         try {
             const { id } = req.body;
             const schedules = await SchedulesRep_1.schedulesRep.findOneBy({ id: id });
-            const formatTime = (date) => {
-                const hours = date.getUTCHours().toString().padStart(2, '0');
-                const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-                return `${hours}:${minutes}`;
-            };
             if (!schedules)
                 return res.status(400).json({ message: "No records found." });
             const response = {
                 id: schedules.id,
                 cod: schedules.cod,
-                saida: formatTime(schedules.saida),
-                chegada: formatTime(schedules.chegada),
-                retorno: formatTime(schedules.retorno)
+                saida: schedules.saida,
+                chegada: schedules.chegada,
+                retorno: schedules.retorno
             };
             return res.json(response);
         }
@@ -105,19 +85,7 @@ class Schedules {
             if (!schedules || schedules.length === 0) {
                 return res.status(400).json({ message: "No records found." });
             }
-            const formatTime = (date) => {
-                const hours = date.getUTCHours().toString().padStart(2, '0');
-                const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-                return `${hours}:${minutes}`;
-            };
-            const formattedSchedules = schedules.map(s => ({
-                id: s.id,
-                cod: s.cod,
-                saida: formatTime(s.saida),
-                chegada: formatTime(s.chegada),
-                retorno: formatTime(s.retorno)
-            }));
-            return res.json(formattedSchedules);
+            return res.json(schedules);
         }
         catch (error) {
             console.error("Error fetching schedules:", error);
