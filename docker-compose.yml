@@ -20,5 +20,3 @@ services:
       - DATABASE_PASSWORD=${DATABASE_PASSWORD}
       - TOKEN_JWT=${TOKEN_JWT}  
     command: npm run start
-    environment:
-      - NODE_ENV=production
