@@ -8,12 +8,12 @@ export class Schedules {
     @Column({name: 'COD'})
     cod: string;
 
-    @Column({ name: 'SAIDA', type: 'timestamp' })
-    saida: Date;
+    @Column({ name: 'SAIDA' })
+    saida: String;
 
-    @Column({name: 'CHEGADA', type: 'timestamp'})
-    chegada: Date;
+    @Column({name: 'CHEGADA'})
+    chegada: String;
 
-    @Column({name: 'RETORNO', type: 'timestamp'})
-    retorno: Date;
+    @Column({name: 'RETORNO'})
+    retorno: String;
 }

@@ -10,26 +10,14 @@ export class Schedules {
         }
 
         try {
-            const today = new Date().toISOString().split('T')[0];
-
-            const toBrasiliaDate = (time: string): Date => {
-                const fullDate = new Date(`${today}T${time}:00`);
-                fullDate.setHours(fullDate.getHours() - 0);
-                return fullDate;
-            };
-
-            const saidaDate = toBrasiliaDate(saida);
-            const chegadaDate = toBrasiliaDate(chegada);
-            const retornoDate = toBrasiliaDate(retorno);
-
-            const schedules = schedulesRep.create({
+            const schedule = schedulesRep.create({
                 cod,
-                saida: saidaDate,
-                chegada: chegadaDate,
-                retorno: retornoDate,
+                saida,
+                chegada,
+                retorno,
             });
 
-            await schedulesRep.save(schedules);
+            await schedulesRep.save(schedule);
 
             return res.status(201).json('Request completed successfully');
 
@@ -59,18 +47,10 @@ export class Schedules {
                 return res.status(404).json({ message: "Schedule not found." });
             }
 
-            const today = new Date().toISOString().split('T')[0]; // yyyy-mm-dd
-
-            const toBrasiliaDate = (time: string): Date => {
-                const fullDate = new Date(`${today}T${time}:00`);
-                fullDate.setHours(fullDate.getHours() - 0); // Corrige fuso UTC-3
-                return fullDate;
-            };
-
-            schedule.cod = cod;
-            schedule.saida = toBrasiliaDate(saida);
-            schedule.chegada = toBrasiliaDate(chegada);
-            schedule.retorno = toBrasiliaDate(retorno);
+            schedule.cod     = cod;
+            schedule.saida   = saida;
+            schedule.chegada = chegada;
+            schedule.retorno = retorno;
 
             await schedulesRep.save(schedule);
 
@@ -88,20 +68,16 @@ export class Schedules {
         try {
             const { id } = req.body;
             const schedules = await schedulesRep.findOneBy({ id: id});
-
-            const formatTime = (date: Date): string => {
-                const hours = date.getUTCHours().toString().padStart(2, '0');
-                const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-                return `${hours}:${minutes}`;
-            };
+            
 
             if(!schedules) return res.status(400).json({ message: "No records found." });
+
             const response = {
                 id: schedules.id,
                 cod: schedules.cod,
-                saida: formatTime(schedules.saida),
-                chegada: formatTime(schedules.chegada),
-                retorno: formatTime(schedules.retorno)
+                saida: schedules.saida,
+                chegada: schedules.chegada,
+                retorno: schedules.retorno
             };
 
             return res.json(response);
@@ -124,21 +100,7 @@ export class Schedules {
                 return res.status(400).json({ message: "No records found." });
             }
 
-            const formatTime = (date: Date): string => {
-                const hours = date.getUTCHours().toString().padStart(2, '0');
-                const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-                return `${hours}:${minutes}`;
-            };
-
-            const formattedSchedules = schedules.map(s => ({
-                id: s.id,
-                cod: s.cod,
-                saida: formatTime(s.saida),
-                chegada: formatTime(s.chegada),
-                retorno: formatTime(s.retorno)
-            }));
-
-            return res.json(formattedSchedules);
+            return res.json(schedules);
         } catch (error) {
             console.error("Error fetching schedules:", error);
             return res.status(500).json({ message: "Internal server error", error });
