@@ -3,23 +3,23 @@ import { schedulesRep } from '../repository/SchedulesRep';
 
 export class Schedules {
     async create(req: Request, res: Response) {
-        const { cod, saida, chegada, retorno } = req.body;
+        const { codigo, partida, chegada, retorno } = req.body;
 
-        if (!cod || !saida || !chegada || !retorno) {
+        if (!codigo || !partida || !chegada || !retorno) {
             return res.status(400).json({ message: "Fields with * required." });
         }
 
         try {
             const schedule = schedulesRep.create({
-                cod,
-                saida,
+                codigo,
+                partida,
                 chegada,
                 retorno,
             });
 
             await schedulesRep.save(schedule);
 
-            return res.status(201).json('Request completed successfully');
+            return res.status(201).json({ message: `Success ${codigo} completed.`});
 
         } catch (error) {
             console.error("Error creating schedule:", error);
@@ -30,13 +30,13 @@ export class Schedules {
     }
 
     async update(req: Request, res: Response) {
-        const { id, cod, saida, chegada, retorno } = req.body;
+        const { id, codigo, partida, chegada, retorno } = req.body;
 
         if (!id) {
             return res.status(400).json({ message: "ID parameter is required." });
         }
 
-        if (!id || !cod || !saida || !chegada || !retorno) {
+        if (!id || !codigo || !partida || !chegada || !retorno) {
             return res.status(400).json({ message: "Fields with * required." });
         }
 
@@ -47,14 +47,14 @@ export class Schedules {
                 return res.status(404).json({ message: "Schedule not found." });
             }
 
-            schedule.cod     = cod;
-            schedule.saida   = saida;
+            schedule.codigo  = codigo;
+            schedule.partida = partida;
             schedule.chegada = chegada;
             schedule.retorno = retorno;
 
             await schedulesRep.save(schedule);
 
-            return res.status(200).json('Update request completed successfully');
+            return res.status(200).json({ message: `Success update ${codigo} completed.`});
 
         } catch (error) {
             console.error("Error updating schedule:", error);
@@ -74,8 +74,8 @@ export class Schedules {
 
             const response = {
                 id: schedules.id,
-                cod: schedules.cod,
-                saida: schedules.saida,
+                cod: schedules.codigo,
+                saida: schedules.partida,
                 chegada: schedules.chegada,
                 retorno: schedules.retorno
             };
@@ -91,8 +91,8 @@ export class Schedules {
         try {
             const schedules = await schedulesRep.find({
                 order: {
-                    cod: 'ASC',
-                    saida: 'ASC'
+                    codigo: 'ASC',
+                    partida: 'ASC'
                 }
             });
 
@@ -115,6 +115,6 @@ export class Schedules {
         if (!schedules) return res.status(400).json({ message: "ID not found." });
 
         await schedulesRep.delete(id);
-        return res.status(201).json({ message: schedules?.cod + " Successfully deleted." });
+        return res.status(201).json({ message: schedules?.codigo + " Successfully deleted." });
     }
 }

@@ -5,11 +5,11 @@ export class Schedules {
     @PrimaryGeneratedColumn({name: 'ID'})
     id: number
 
-    @Column({name: 'COD'})
-    cod: string;
+    @Column({name: 'CODIGO'})
+    codigo: string;
 
-    @Column({ name: 'SAIDA' })
-    saida: String;
+    @Column({ name: 'PARTIDA' })
+    partida: String;
 
     @Column({name: 'CHEGADA'})
     chegada: String;

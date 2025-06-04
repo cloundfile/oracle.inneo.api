@@ -19,13 +19,13 @@ __decorate([
     __metadata("design:type", Number)
 ], Schedules.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'COD' }),
+    (0, typeorm_1.Column)({ name: 'CODIGO' }),
     __metadata("design:type", String)
-], Schedules.prototype, "cod", void 0);
+], Schedules.prototype, "codigo", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'SAIDA' }),
+    (0, typeorm_1.Column)({ name: 'PARTIDA' }),
     __metadata("design:type", String)
-], Schedules.prototype, "saida", void 0);
+], Schedules.prototype, "partida", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'CHEGADA' }),
     __metadata("design:type", String)
